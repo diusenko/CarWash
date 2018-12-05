@@ -11,6 +11,7 @@
 		3F38110F2183140D007CC2B3 /* Strideable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F38110E2183140D007CC2B3 /* Strideable+Extension.swift */; };
 		3F381111218315DA007CC2B3 /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F381110218315DA007CC2B3 /* Optional+Extension.swift */; };
 		3F381113218322E2007CC2B3 /* RangeReplaceableCollection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F381112218322E2007CC2B3 /* RangeReplaceableCollection+Extension.swift */; };
+		3F59AD4021B7F8FD009A0789 /* StateObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59AD3F21B7F8FD009A0789 /* StateObserver.swift */; };
 		3F68F5582192D5D500C9FE1C /* CarFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F68F5572192D5D500C9FE1C /* CarFactory.swift */; };
 		3F68F55A21931DD200C9FE1C /* Stateable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F68F55921931DD200C9FE1C /* Stateable.swift */; };
 		3F84B187217F08800074A4CC /* Accountant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F84B173217F08800074A4CC /* Accountant.swift */; };
@@ -47,6 +48,7 @@
 		3F38110E2183140D007CC2B3 /* Strideable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strideable+Extension.swift"; sourceTree = "<group>"; };
 		3F381110218315DA007CC2B3 /* Optional+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Optional+Extension.swift"; sourceTree = "<group>"; };
 		3F381112218322E2007CC2B3 /* RangeReplaceableCollection+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RangeReplaceableCollection+Extension.swift"; sourceTree = "<group>"; };
+		3F59AD3F21B7F8FD009A0789 /* StateObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateObserver.swift; sourceTree = "<group>"; };
 		3F68F5572192D5D500C9FE1C /* CarFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarFactory.swift; sourceTree = "<group>"; };
 		3F68F55921931DD200C9FE1C /* Stateable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stateable.swift; sourceTree = "<group>"; };
 		3F84B13F217F069F0074A4CC /* CarWash */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CarWash; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -158,6 +160,7 @@
 				3F84B184217F08800074A4CC /* MoneyGiver.swift */,
 				3F84B19B217F3E8C0074A4CC /* MoneyReceiver.swift */,
 				3F68F55921931DD200C9FE1C /* Stateable.swift */,
+				3F59AD3F21B7F8FD009A0789 /* StateObserver.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 				3F84B187217F08800074A4CC /* Accountant.swift in Sources */,
 				3F84B190217F08800074A4CC /* Director.swift in Sources */,
 				3F38110D2182FB5D007CC2B3 /* F.swift in Sources */,
+				3F59AD4021B7F8FD009A0789 /* StateObserver.swift in Sources */,
 				3F84B19C217F3E8C0074A4CC /* MoneyReceiver.swift in Sources */,
 				3F88AB2F21874F59003B6258 /* Queue.swift in Sources */,
 				3F381111218315DA007CC2B3 /* Optional+Extension.swift in Sources */,

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class WashService {
+class WashService: StateObserver {
     
     private let accountant: Accountant
     private let director: Director
@@ -26,13 +26,11 @@ class WashService {
         self.accountant = accountant
         self.washers = Atomic(washers)
         self.director = director
-        self.accountant.eventHandler = { self.doDirectorWork(accountant: self.accountant) }
         washers.forEach { washer in
-            washer.eventHandler = {
-                self.doAccountantWork(washer: washer)
-                //self.cars.dequeue().do { self.doWasherWork(washer: washer, car: $0) }
-            }
+            washer.observer = self
         }
+        self.accountant.observer = self
+        self.director.observer = self
     }
     
     func washCar(_ car: Car) {
@@ -45,7 +43,7 @@ class WashService {
             
             if cars.isEmpty {
                 if let availableWasher = availableWasher {
-                    self.doWasherWork(washer: availableWasher, car: car)
+                    availableWasher.performWork(processedObject: car)
                 } else {
                     enqueueCar() // duplication
                 }
@@ -55,15 +53,20 @@ class WashService {
         }
     }
     
-    private func doWasherWork(washer: Washer, car: Car) {
-        washer.performWork(processedObject: car)
-    }
-    
-    private func doAccountantWork(washer: Washer) {
-        self.accountant.performWork(processedObject: washer)
-    }
-    
-    private func doDirectorWork(accountant: Accountant) {
-        self.director.performWork(processedObject: accountant)
+    func valueChanged<T>(subject: Staff<T>, newValue: Staff<T>.State) {
+        if let washer = subject as? Washer  {
+            if newValue == .available {
+                self.cars.dequeue().do(washer.performWork)
+            } else if newValue == .waitForProcessing {
+                self.accountant.performWork(processedObject: washer)
+            }
+        } else if let accountant = subject as? Accountant {
+            if newValue == .waitForProcessing {
+                self.director.performWork(processedObject: accountant)
+            } else if newValue == .available && !accountant.processingObjectsIsEmpty {
+                accountant.state = .busy
+                accountant.checkQueue()
+            }
+        }
     }
 }

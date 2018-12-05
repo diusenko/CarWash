@@ -19,32 +19,27 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
     var state: State {
         get { return self.atomicState.value }
         set {
-            self.atomicState.modify {
-                if $0 == .busy && newValue == .waitForProcessing {
-                    self.eventHandler?()
-                    $0 = .busy
-                } else if $0 == .waitForProcessing && newValue == .available && !self.processingObjects.isEmpty {
-                    self.processingObjects.dequeue().do(performProcessing)
-                    $0 = .busy
-                } else {
-                    $0 = newValue
-                }
-            }
+            self.atomicState.value = newValue
+            self.observer?.valueChanged(subject: self, newValue: newValue)
         }
     }
     
     var money: Int {
         return self.atomicMoney.value
     }
-    
-    var eventHandler: F.Completion?
 
+    var processingObjectsIsEmpty: Bool {
+        return self.processingObjects.isEmpty
+    }
+    
+    weak var observer: StateObserver?
+    
     let id: Int
+    
     private let atomicState = Atomic(State.available)
-   
+    private let atomicMoney = Atomic(0)
     private let queue: DispatchQueue
     private let durationOfWork: ClosedRange<Double>
-    private let atomicMoney = Atomic(0)
     private let processingObjects = Queue<ProcessedObject>()
     
     init(
@@ -92,20 +87,21 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
         }
     }
     
+    func checkQueue() {
+        if let processingObject = self.processingObjects.dequeue() {
+            self.asyncDoWork(processedObject: processingObject)
+        } else {
+            self.completePerformWork()
+        }
+    }
+    
     private func asyncDoWork(
         processedObject: ProcessedObject
     ) {
         self.queue.asyncAfter(deadline: .afterRandomInterval(in: self.durationOfWork)) {
             self.performProcessing(object: processedObject)
             self.completeProcessing(object: processedObject)
-            
-            if self.processingObjects.isEmpty {
-                self.completePerformWork()
-            } else {
-                self.processingObjects.dequeue().do {
-                    self.asyncDoWork(processedObject: $0)
-                }
-            }
+            self.checkQueue()
         }
     }
     

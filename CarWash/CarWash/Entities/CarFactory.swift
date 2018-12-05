@@ -10,11 +10,9 @@ import Foundation
 
 class CarFactory {
     
-    //FIX THIS SHIT
     private var cancellationToken: DispatchQueue.CancellationToken? {
         willSet { self.cancellationToken?.stop() }
     }
-    //////////////////////////
     
     var isCancelled: Bool {
         return self.cancellationToken == nil
