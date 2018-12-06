@@ -12,6 +12,7 @@ protocol StateObserver: class {
     
     func valueChanged<processObject: MoneyGiver>(
         subject: Staff<processObject>,
-        oldValue: Staff<processObject>.State
+        oldValue: Staff<processObject>.State,
+        newValue: Staff<processObject>.State
     )
 }

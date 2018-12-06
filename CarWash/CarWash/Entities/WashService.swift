@@ -53,15 +53,15 @@ class WashService: StateObserver {
         }
     }
     
-    func valueChanged<T>(subject: Staff<T>, oldValue: Staff<T>.State) {
+    func valueChanged<T>(subject: Staff<T>, oldValue: Staff<T>.State, newValue: Staff<T>.State) {
         if let washer = subject as? Washer  {
-            if washer.state == .available {
+            if newValue == .available {
                 self.cars.dequeue().do(washer.performWork)
-            } else if washer.state == .waitForProcessing {
+            } else if newValue == .waitForProcessing {
                 self.accountant.performWork(processedObject: washer)
             }
         } else if let accountant = subject as? Accountant {
-            if accountant.state == .waitForProcessing {
+            if newValue == .waitForProcessing {
                 self.director.performWork(processedObject: accountant)
             }
         }

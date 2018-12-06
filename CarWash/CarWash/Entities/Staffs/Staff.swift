@@ -28,7 +28,7 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
                 self.atomicState.value = newValue
             }
             
-            self.observer?.valueChanged(subject: self, oldValue: oldValue)
+            self.observer?.valueChanged(subject: self, oldValue: oldValue, newValue: self.state)
         }
     }
     
