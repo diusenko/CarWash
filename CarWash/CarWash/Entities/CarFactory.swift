@@ -10,12 +10,12 @@ import Foundation
 
 class CarFactory {
     
-    private var cancellationToken: DispatchQueue.CancellationToken? {
-        willSet { self.cancellationToken?.stop() }
-    }
-    
     var isCancelled: Bool {
         return self.cancellationToken == nil
+    }
+    
+    private var cancellationToken: DispatchQueue.CancellationToken? {
+        willSet { self.cancellationToken?.stop() }
     }
 
     private let cars = 10
@@ -23,14 +23,14 @@ class CarFactory {
     private let interval: TimeInterval
     private let queue: DispatchQueue
     
+    deinit {
+        self.cancel()
+    }
+    
     init(washService: WashService, interval: TimeInterval, queue: DispatchQueue = .background) {
         self.washService = washService
         self.interval = interval
         self.queue = queue
-    }
-    
-    deinit {
-        self.cancel()
     }
     
     func start() {

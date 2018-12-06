@@ -41,7 +41,7 @@ class WashService: StateObserver {
             
             let enqueueCar = { self.cars.enqueue(car) }
             
-            if cars.isEmpty {
+            if self.cars.isEmpty {
                 if let availableWasher = availableWasher {
                     availableWasher.performWork(processedObject: car)
                 } else {
@@ -53,17 +53,17 @@ class WashService: StateObserver {
         }
     }
     
-    func valueChanged<T>(subject: Staff<T>, newValue: Staff<T>.State) {
+    func valueChanged<T>(subject: Staff<T>, oldValue: Staff<T>.State) {
         if let washer = subject as? Washer  {
-            if newValue == .available {
+            if washer.state == .available {
                 self.cars.dequeue().do(washer.performWork)
-            } else if newValue == .waitForProcessing {
+            } else if washer.state == .waitForProcessing {
                 self.accountant.performWork(processedObject: washer)
             }
         } else if let accountant = subject as? Accountant {
-            if newValue == .waitForProcessing {
+            if accountant.state == .waitForProcessing {
                 self.director.performWork(processedObject: accountant)
-            } else if newValue == .available && !accountant.processingObjectsIsEmpty {
+            } else if accountant.state == .available && oldValue == .waitForProcessing && !accountant.processingObjectsIsEmpty {
                 accountant.state = .busy
                 accountant.checkQueue()
             }

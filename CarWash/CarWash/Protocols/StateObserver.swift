@@ -10,5 +10,8 @@ import Foundation
 
 protocol StateObserver: class {
     
-    func valueChanged<T: MoneyGiver>(subject: Staff<T>, newValue: Staff<T>.State)
+    func valueChanged<processObject: MoneyGiver>(
+        subject: Staff<processObject>,
+        oldValue: Staff<processObject>.State
+    )
 }
