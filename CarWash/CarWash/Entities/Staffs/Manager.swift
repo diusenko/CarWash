@@ -11,11 +11,7 @@ import Foundation
 class Manager<ProcessedObject: MoneyGiver & Stateable>: Staff<ProcessedObject> {
     
     override func completeProcessing(object: ProcessedObject) {
-        print(
-            self, "served",
-            "\(object)",
-            "and has", "\(self.money)$"
-        )
+        print("\(self) served \(object) and has \(self.money)$")
         object.state = .available
     }
     
