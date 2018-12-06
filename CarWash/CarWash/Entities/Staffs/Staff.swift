@@ -19,8 +19,16 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
     var state: State {
         get { return self.atomicState.value }
         set {
-            self.atomicState.value = newValue
-            self.observer?.valueChanged(subject: self, oldValue: newValue)
+            let oldValue = self.state
+            
+            if newValue == .available && self.state == .waitForProcessing && !self.processingObjectsIsEmpty {
+                self.atomicState.value = .busy
+                self.processingObjects.dequeue().do(self.asyncDoWork)
+            } else {
+                self.atomicState.value = newValue
+            }
+            
+            self.observer?.valueChanged(subject: self, oldValue: oldValue)
         }
     }
     
@@ -87,7 +95,7 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
         }
     }
     
-    func checkQueue() {
+    private func checkQueue() {
         if let processingObject = self.processingObjects.dequeue() {
             self.asyncDoWork(processedObject: processingObject)
         } else {

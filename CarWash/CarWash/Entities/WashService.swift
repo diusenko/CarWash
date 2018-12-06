@@ -45,10 +45,10 @@ class WashService: StateObserver {
                 if let availableWasher = availableWasher {
                     availableWasher.performWork(processedObject: car)
                 } else {
-                    enqueueCar() // duplication
+                    enqueueCar()
                 }
             } else {
-                enqueueCar() // duplication
+                enqueueCar()
             }
         }
     }
@@ -63,9 +63,6 @@ class WashService: StateObserver {
         } else if let accountant = subject as? Accountant {
             if accountant.state == .waitForProcessing {
                 self.director.performWork(processedObject: accountant)
-            } else if accountant.state == .available && oldValue == .waitForProcessing && !accountant.processingObjectsIsEmpty {
-                accountant.state = .busy
-                accountant.checkQueue()
             }
         }
     }
