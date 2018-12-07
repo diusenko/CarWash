@@ -12,7 +12,7 @@ class WashService: StateObserver {
     
     private let accountant: Accountant
     private let director: Director
-    private let id: Int
+    let id: Int
     private let washers: Atomic<[Washer]>
     private let cars = Queue<Car>()
     
@@ -26,11 +26,11 @@ class WashService: StateObserver {
         self.accountant = accountant
         self.washers = Atomic(washers)
         self.director = director
-        washers.forEach { washer in
-            washer.observer = self
+        self.washers.value.forEach { washer in
+            washer.add(observer: self)
         }
-        self.accountant.observer = self
-        self.director.observer = self
+        self.accountant.add(observer: self)
+        self.director.add(observer: self)
     }
     
     func washCar(_ car: Car) {
@@ -53,7 +53,11 @@ class WashService: StateObserver {
         }
     }
     
-    func valueChanged<T>(subject: Staff<T>, oldValue: Staff<T>.State, newValue: Staff<T>.State) {
+    func valueChanged<ProcessObject>(
+        subject: Staff<ProcessObject>,
+        oldValue: Staff<ProcessObject>.State,
+        newValue: Staff<ProcessObject>.State
+    ) {
         if let washer = subject as? Washer  {
             if newValue == .available {
                 self.cars.dequeue().do(washer.performWork)

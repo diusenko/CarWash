@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, CustomStringConvertible {
+class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, Observable, CustomStringConvertible {
     
     enum State {
         case available
@@ -27,8 +27,7 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
             } else {
                 self.atomicState.value = newValue
             }
-            
-            self.observer?.valueChanged(subject: self, oldValue: oldValue, newValue: self.state)
+            self.notify(oldValue: oldValue, newValue: newValue)
         }
     }
     
@@ -40,8 +39,8 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
         return self.processingObjects.isEmpty
     }
     
-    weak var observer: StateObserver?
-    
+    var observers = [Int: WeakObserver]()
+
     let id: Int
     
     private let atomicState = Atomic(State.available)
@@ -58,6 +57,23 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
         self.id = id
         self.durationOfWork = durationOfWork
         self.queue = queue
+    }
+    
+    func add(observer: StateObserver) {
+        let weakObserver = WeakObserver(observer: observer)
+        self.observers.updateValue(weakObserver, forKey: observer.id)
+    }
+    
+    func remove(observer: StateObserver) {
+        self.observers.removeValue(forKey: observer.id)
+    }
+    
+    func notify(oldValue: Staff<ProcessedObject>.State, newValue: Staff<ProcessedObject>.State) {
+        self.observers.forEach {
+            $0.value.observer.do { observer in
+                observer.valueChanged(subject: self, oldValue: oldValue, newValue: newValue)
+            }
+        }
     }
     
     func giveMoney() -> Int {
@@ -116,4 +132,16 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
     var description: String {
         return "\(type(of: self))\(self.id)"
     }
+    
+    //SHIT
+    class WeakObserver {
+        
+        weak var observer: StateObserver?
+        
+        init(observer: StateObserver) {
+            self.observer = observer
+        }
+    }
 }
+
+

@@ -10,9 +10,11 @@ import Foundation
 
 protocol StateObserver: class {
     
-    func valueChanged<processObject: MoneyGiver>(
-        subject: Staff<processObject>,
-        oldValue: Staff<processObject>.State,
-        newValue: Staff<processObject>.State
+    var id: Int { get }
+    
+    func valueChanged<ProcessObject: MoneyGiver>(
+        subject: Staff<ProcessObject>,
+        oldValue: Staff<ProcessObject>.State,
+        newValue: Staff<ProcessObject>.State
     )
 }
