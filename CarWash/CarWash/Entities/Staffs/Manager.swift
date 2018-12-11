@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Manager<ProcessedObject: MoneyGiver & Stateable>: Staff<ProcessedObject> {
+class Manager<ProcessedObject: MoneyGiver & Stateable>: Employee<ProcessedObject> {
     
     override func completeProcessing(object: ProcessedObject) {
         print("\(self) served \(object) and has \(self.money)$")

@@ -12,5 +12,5 @@ protocol Stateable: class {
     
     associatedtype ProcessedObject: MoneyGiver
     
-    var state: Staff<ProcessedObject>.State { get set }
+    var state: Employee<ProcessedObject>.State { get set }
 }

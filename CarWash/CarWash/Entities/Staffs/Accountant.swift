@@ -8,6 +8,4 @@
 
 import Foundation
 
-class Accountant: Manager<Washer> {
-    
-}
+class Accountant: Manager<Washer> { }

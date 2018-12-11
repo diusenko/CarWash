@@ -1,6 +1,6 @@
 //
 //  Staff.swift
-//  CarWash
+//  Employee
 //
 //  Created by Student on 10/25/18.
 //  Copyright © 2018 Student. All rights reserved.
@@ -8,7 +8,60 @@
 
 import Foundation
 
-class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, Observable, CustomStringConvertible {
+class Employee<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, CustomStringConvertible {
+    
+    class StaffObserver: Equatable {
+        
+        static func == (lhs: Employee<ProcessedObject>.StaffObserver, rhs: Employee<ProcessedObject>.StaffObserver) -> Bool {
+            return lhs === rhs
+        }
+        
+        typealias Handler = (State) -> ()
+        
+        var IsObserving: Bool {
+            return self.sender != nil
+        }
+        
+        private weak var sender: Employee?
+        fileprivate let handler: Handler
+        
+        init(sender: Employee, handler: @escaping Handler) {
+            self.sender = sender
+            self.handler = handler
+        }
+        
+        func cancel() {
+            self.sender = nil
+        }
+        
+    }
+    
+    var observers = ObserversCollection()
+    
+    class ObserversCollection {
+        
+        private var atomicObservers = Atomic([StaffObserver]())
+        
+        func add(observer: StaffObserver) {
+            self.atomicObservers.modify {
+                $0.append(observer)
+            }
+        }
+        
+        func notify(state: State){
+            self.atomicObservers.modify {
+                $0 = $0.filter { $0.IsObserving }
+                $0.forEach {
+                    $0.handler(state)
+                }
+            }
+        }
+    }
+    
+    func observer(handler: @escaping StaffObserver.Handler) {
+        let staffObserver = StaffObserver(sender: self, handler: handler)
+        observers.add(observer: staffObserver)
+    }
     
     enum State {
         case available
@@ -19,7 +72,7 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
     var state: State {
         get { return self.atomicState.value }
         set {
-            let oldValue = self.state
+            guard self.state != newValue else { return }
             
             if newValue == .available && self.state == .waitForProcessing && !self.processingObjectsIsEmpty {
                 self.atomicState.value = .busy
@@ -27,7 +80,8 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
             } else {
                 self.atomicState.value = newValue
             }
-            self.notify(oldValue: oldValue, newValue: newValue)
+            
+            self.observers.notify(state: newValue)
         }
     }
     
@@ -38,8 +92,6 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
     var processingObjectsIsEmpty: Bool {
         return self.processingObjects.isEmpty
     }
-    
-    var observers = [Int: WeakObserver]()
 
     let id: Int
     
@@ -57,23 +109,6 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
         self.id = id
         self.durationOfWork = durationOfWork
         self.queue = queue
-    }
-    
-    func add(observer: StateObserver) {
-        let weakObserver = WeakObserver(observer: observer)
-        self.observers.updateValue(weakObserver, forKey: observer.id)
-    }
-    
-    func remove(observer: StateObserver) {
-        self.observers.removeValue(forKey: observer.id)
-    }
-    
-    func notify(oldValue: Staff<ProcessedObject>.State, newValue: Staff<ProcessedObject>.State) {
-        self.observers.forEach {
-            $0.value.observer.do { observer in
-                observer.valueChanged(subject: self, oldValue: oldValue, newValue: newValue)
-            }
-        }
     }
     
     func giveMoney() -> Int {
@@ -95,7 +130,11 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
     func completeProcessing(object: ProcessedObject) { }
     
     func completePerformWork() {
-        self.state = .waitForProcessing
+        if let processingObject = self.processingObjects.dequeue() {
+            self.asyncDoWork(processedObject: processingObject)
+        } else {
+            self.state = .waitForProcessing
+        }
     }
     
     func performWork(
@@ -111,37 +150,17 @@ class Staff<ProcessedObject: MoneyGiver>: Stateable, MoneyReceiver, MoneyGiver, 
         }
     }
     
-    private func checkQueue() {
-        if let processingObject = self.processingObjects.dequeue() {
-            self.asyncDoWork(processedObject: processingObject)
-        } else {
-            self.completePerformWork()
-        }
-    }
-    
     private func asyncDoWork(
         processedObject: ProcessedObject
     ) {
         self.queue.asyncAfter(deadline: .afterRandomInterval(in: self.durationOfWork)) {
             self.performProcessing(object: processedObject)
             self.completeProcessing(object: processedObject)
-            self.checkQueue()
+            self.completePerformWork()
         }
     }
     
     var description: String {
         return "\(type(of: self))\(self.id)"
     }
-    
-    //SHIT
-    class WeakObserver {
-        
-        weak var observer: StateObserver?
-        
-        init(observer: StateObserver) {
-            self.observer = observer
-        }
-    }
 }
-
-

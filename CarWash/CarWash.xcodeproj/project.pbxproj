@@ -11,15 +11,14 @@
 		3F38110F2183140D007CC2B3 /* Strideable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F38110E2183140D007CC2B3 /* Strideable+Extension.swift */; };
 		3F381111218315DA007CC2B3 /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F381110218315DA007CC2B3 /* Optional+Extension.swift */; };
 		3F381113218322E2007CC2B3 /* RangeReplaceableCollection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F381112218322E2007CC2B3 /* RangeReplaceableCollection+Extension.swift */; };
-		3F59AD4021B7F8FD009A0789 /* StateObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59AD3F21B7F8FD009A0789 /* StateObserver.swift */; };
-		3F5BDB8121B965290027D603 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5BDB8021B965290027D603 /* Observable.swift */; };
+		3F5B40D721BFFA2D00A223A4 /* Staff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5B40D621BFFA2D00A223A4 /* Staff.swift */; };
 		3F68F5582192D5D500C9FE1C /* CarFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F68F5572192D5D500C9FE1C /* CarFactory.swift */; };
 		3F68F55A21931DD200C9FE1C /* Stateable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F68F55921931DD200C9FE1C /* Stateable.swift */; };
 		3F84B187217F08800074A4CC /* Accountant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F84B173217F08800074A4CC /* Accountant.swift */; };
 		3F84B188217F08800074A4CC /* Washer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F84B174217F08800074A4CC /* Washer.swift */; };
 		3F84B189217F08800074A4CC /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F84B175217F08800074A4CC /* Car.swift */; };
 		3F84B18A217F08800074A4CC /* WashService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F84B176217F08800074A4CC /* WashService.swift */; };
-		3F84B18B217F08800074A4CC /* Staff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F84B177217F08800074A4CC /* Staff.swift */; };
+		3F84B18B217F08800074A4CC /* Employee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F84B177217F08800074A4CC /* Employee.swift */; };
 		3F84B190217F08800074A4CC /* Director.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F84B17C217F08800074A4CC /* Director.swift */; };
 		3F84B193217F08800074A4CC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F84B180217F08800074A4CC /* main.swift */; };
 		3F84B196217F08800074A4CC /* MoneyGiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F84B184217F08800074A4CC /* MoneyGiver.swift */; };
@@ -49,8 +48,7 @@
 		3F38110E2183140D007CC2B3 /* Strideable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strideable+Extension.swift"; sourceTree = "<group>"; };
 		3F381110218315DA007CC2B3 /* Optional+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Optional+Extension.swift"; sourceTree = "<group>"; };
 		3F381112218322E2007CC2B3 /* RangeReplaceableCollection+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RangeReplaceableCollection+Extension.swift"; sourceTree = "<group>"; };
-		3F59AD3F21B7F8FD009A0789 /* StateObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateObserver.swift; sourceTree = "<group>"; };
-		3F5BDB8021B965290027D603 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		3F5B40D621BFFA2D00A223A4 /* Staff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Staff.swift; sourceTree = "<group>"; };
 		3F68F5572192D5D500C9FE1C /* CarFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarFactory.swift; sourceTree = "<group>"; };
 		3F68F55921931DD200C9FE1C /* Stateable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stateable.swift; sourceTree = "<group>"; };
 		3F84B13F217F069F0074A4CC /* CarWash */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CarWash; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,7 +56,7 @@
 		3F84B174217F08800074A4CC /* Washer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Washer.swift; sourceTree = "<group>"; };
 		3F84B175217F08800074A4CC /* Car.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
 		3F84B176217F08800074A4CC /* WashService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WashService.swift; sourceTree = "<group>"; };
-		3F84B177217F08800074A4CC /* Staff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Staff.swift; sourceTree = "<group>"; };
+		3F84B177217F08800074A4CC /* Employee.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Employee.swift; sourceTree = "<group>"; };
 		3F84B17C217F08800074A4CC /* Director.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Director.swift; sourceTree = "<group>"; };
 		3F84B180217F08800074A4CC /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		3F84B184217F08800074A4CC /* MoneyGiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoneyGiver.swift; sourceTree = "<group>"; };
@@ -108,7 +106,7 @@
 		3F65F0F62195769B00B13065 /* Staffs */ = {
 			isa = PBXGroup;
 			children = (
-				3F84B177217F08800074A4CC /* Staff.swift */,
+				3F84B177217F08800074A4CC /* Employee.swift */,
 				3F84B174217F08800074A4CC /* Washer.swift */,
 				3F84B173217F08800074A4CC /* Accountant.swift */,
 				3F84B17C217F08800074A4CC /* Director.swift */,
@@ -151,6 +149,7 @@
 				3F84B175217F08800074A4CC /* Car.swift */,
 				3F68F5572192D5D500C9FE1C /* CarFactory.swift */,
 				3F84B176217F08800074A4CC /* WashService.swift */,
+				3F5B40D621BFFA2D00A223A4 /* Staff.swift */,
 				3F65F0F62195769B00B13065 /* Staffs */,
 			);
 			path = Entities;
@@ -162,8 +161,6 @@
 				3F84B184217F08800074A4CC /* MoneyGiver.swift */,
 				3F84B19B217F3E8C0074A4CC /* MoneyReceiver.swift */,
 				3F68F55921931DD200C9FE1C /* Stateable.swift */,
-				3F59AD3F21B7F8FD009A0789 /* StateObserver.swift */,
-				3F5BDB8021B965290027D603 /* Observable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -235,7 +232,8 @@
 			files = (
 				8BBD1078219B5E650005F2BD /* Manager.swift in Sources */,
 				3FE72B2021804DEF002A5F42 /* DispatchTime+Extension.swift in Sources */,
-				3F84B18B217F08800074A4CC /* Staff.swift in Sources */,
+				3F84B18B217F08800074A4CC /* Employee.swift in Sources */,
+				3F5B40D721BFFA2D00A223A4 /* Staff.swift in Sources */,
 				3F84B188217F08800074A4CC /* Washer.swift in Sources */,
 				3FEB5D982189F97800A46F1D /* NSLocking+Extension.swift in Sources */,
 				3F381113218322E2007CC2B3 /* RangeReplaceableCollection+Extension.swift in Sources */,
@@ -250,12 +248,10 @@
 				3F84B187217F08800074A4CC /* Accountant.swift in Sources */,
 				3F84B190217F08800074A4CC /* Director.swift in Sources */,
 				3F38110D2182FB5D007CC2B3 /* F.swift in Sources */,
-				3F59AD4021B7F8FD009A0789 /* StateObserver.swift in Sources */,
 				3F84B19C217F3E8C0074A4CC /* MoneyReceiver.swift in Sources */,
 				3F88AB2F21874F59003B6258 /* Queue.swift in Sources */,
 				3F381111218315DA007CC2B3 /* Optional+Extension.swift in Sources */,
 				3F84B196217F08800074A4CC /* MoneyGiver.swift in Sources */,
-				3F5BDB8121B965290027D603 /* Observable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

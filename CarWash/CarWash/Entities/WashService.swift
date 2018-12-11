@@ -8,13 +8,17 @@
 
 import Foundation
 
-class WashService: StateObserver {
+class WashService {
     
     private let accountant: Accountant
     private let director: Director
     let id: Int
     private let washers: Atomic<[Washer]>
     private let cars = Queue<Car>()
+    
+    deinit {
+        
+    }
     
     init(
         id: Int,
@@ -26,11 +30,39 @@ class WashService: StateObserver {
         self.accountant = accountant
         self.washers = Atomic(washers)
         self.director = director
+//        self.washers.value.forEach { washer in
+//            washer.add(observer: self)
+//        }
+//        self.accountant.add(observer: self)
+//        self.director.add(observer: self)
+        
         self.washers.value.forEach { washer in
-            washer.add(observer: self)
+            washer.observer { [weak self] in
+                switch $0 {
+                case .available: self?.cars.dequeue().do(washer.performWork)
+                case .waitForProcessing: self?.accountant.performWork(processedObject: washer)
+                case .busy: return
+                }
+            }
         }
-        self.accountant.add(observer: self)
-        self.director.add(observer: self)
+        
+        self.accountant.observer { //[weak self] in
+            switch $0 {
+            case .available: return
+            case .waitForProcessing: self.director.performWork(processedObject: self.accountant)
+            case .busy: return
+            }
+        }
+
+//        self.washers.value.map { washer in
+//            washer.observer { [weak washer, weak self] in
+//                switch $0 {
+//                case .available: self?.cars.dequeue().apply(washer?.performWork)
+//                case .waitForProcessing: washer.do(self?.accountant.performWork)
+//                case .busy: return
+//                }
+//            }
+//        }
     }
     
     func washCar(_ car: Car) {
@@ -49,24 +81,6 @@ class WashService: StateObserver {
                 }
             } else {
                 enqueueCar()
-            }
-        }
-    }
-    
-    func valueChanged<ProcessObject>(
-        subject: Staff<ProcessObject>,
-        oldValue: Staff<ProcessObject>.State,
-        newValue: Staff<ProcessObject>.State
-    ) {
-        if let washer = subject as? Washer  {
-            if newValue == .available {
-                self.cars.dequeue().do(washer.performWork)
-            } else if newValue == .waitForProcessing {
-                self.accountant.performWork(processedObject: washer)
-            }
-        } else if let accountant = subject as? Accountant {
-            if newValue == .waitForProcessing {
-                self.director.performWork(processedObject: accountant)
             }
         }
     }
