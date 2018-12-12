@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Washer: Employee<Car> {
+class Washer: Staff<Car> {
 
     override func performProcessing(object car: Car) {
         car.state = .clean

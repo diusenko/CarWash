@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Employee<ProcessedObject: MoneyGiver>: Person {
+class Staff<ProcessedObject: MoneyGiver>: Person {
     
 
     var processingObjectsIsEmpty: Bool {
