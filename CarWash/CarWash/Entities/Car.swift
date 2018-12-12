@@ -15,7 +15,14 @@ class Car: MoneyGiver {
         case dirty
     }
     
-    let atomicState = Atomic(State.dirty)
+    var state: State {
+        get { return self.atomicState.value }
+        set {
+            atomicState.value = newValue
+        }
+    }
+    
+    private let atomicState = Atomic(State.dirty)
     private let atomicMoney = Atomic(0)
     
     init(money: Int) {

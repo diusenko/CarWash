@@ -11,7 +11,7 @@ import Foundation
 class Washer: Employee<Car> {
 
     override func performProcessing(object car: Car) {
-        car.atomicState.modify { $0 = .clean }
+        car.state = .clean
     }
     
     override func completeProcessing(object car: Car) {
