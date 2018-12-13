@@ -25,7 +25,7 @@ class StaffObserver: Hashable {
     }
     
     private weak var sender: Person?
-    let handler: Handler                            /////////////////////////ASDADSASDADA
+    private(set) var handler: Handler
     
     init(sender: Person, handler: @escaping Handler) {
         self.sender = sender
