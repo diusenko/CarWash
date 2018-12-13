@@ -34,10 +34,9 @@ class CarFactory {
     }
     
     func start() {
-        self.cancellationToken = self.queue
-            .timer(interval: self.interval) { [weak self] in
+        self.cancellationToken = self.queue.timer(interval: self.interval) { [weak self] in
                 self?.carsFeed()
-            }
+        }
     }
     
     func cancel() {

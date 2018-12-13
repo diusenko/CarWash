@@ -70,13 +70,10 @@ class WashService {
         }
         
         let weakAccountantObserver = self.accountant.observer { [weak self] in
-            switch $0 {
-            case .available: return
-            case .waitForProcessing: (self?.accountant).apply(self?.director.performWork)
-            case .busy: return
+            if $0 == .waitForProcessing {
+                (self?.accountant).apply(self?.director.performWork)
             }
         }
-        
         self.weakObservers.append(weakAccountantObserver)
     }
 }
