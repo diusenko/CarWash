@@ -10,15 +10,11 @@ import Foundation
 
 class StaffObserver: Hashable {
     
-    public var hashValue: Int {
+    typealias Handler = (Person.State) -> ()
+    
+    var hashValue: Int {
         return ObjectIdentifier(self).hashValue
     }
-    
-    static func == (lhs: StaffObserver, rhs: StaffObserver) -> Bool {
-        return lhs === rhs
-    }
-    
-    typealias Handler = (Person.State) -> ()
     
     var IsObserving: Bool {
         return self.sender != nil
@@ -36,4 +32,7 @@ class StaffObserver: Hashable {
         self.sender = nil
     }
     
+    static func == (lhs: StaffObserver, rhs: StaffObserver) -> Bool {
+        return lhs === rhs
+    }
 }
