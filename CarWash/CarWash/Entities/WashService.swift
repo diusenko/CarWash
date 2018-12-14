@@ -10,16 +10,18 @@ import Foundation
 
 class WashService {
     
+    let id: Int
+    
     private let accountant: Accountant
     private let director: Director
-    let id: Int
     private let washers: Atomic<[Washer]>
     private let cars = Queue<Car>()
-    private var weakObservers = [StaffObserver]()
+    
+    private var weakObservers = Atomic([Person.Observer]())
     
     deinit {
         print("deinit")
-        self.weakObservers.forEach {
+        self.weakObservers.value.forEach {
             $0.cancel()
         }
     }
@@ -59,21 +61,25 @@ class WashService {
     
     func attach() {
         self.washers.value.forEach { washer in
+           
             let weakWasherObserver = washer.observer { [weak self, weak washer] in
-                switch $0 {
-                case .available: self?.cars.dequeue().do { washer?.performWork(processedObject: $0) }
-                case .waitForProcessing: washer.apply(self?.accountant.performWork)
-                case .busy: return
-                }
+                    switch $0 {
+                    case .available: self?.cars.dequeue().do { washer?.performWork(processedObject: $0) }
+                    case .waitForProcessing: washer.apply(self?.accountant.performWork)
+                    case .busy: return
+                    }
             }
-            self.weakObservers.append(weakWasherObserver)
+            self.weakObservers.value.append(weakWasherObserver)
+            
         }
         
         let weakAccountantObserver = self.accountant.observer { [weak self] in
-            if $0 == .waitForProcessing {
-                (self?.accountant).apply(self?.director.performWork)
+            switch $0 {
+            case .available: return
+            case .waitForProcessing: (self?.accountant).apply(self?.director.performWork)
+            case .busy: return
             }
         }
-        self.weakObservers.append(weakAccountantObserver)
+        self.weakObservers.value.append(weakAccountantObserver)
     }
 }

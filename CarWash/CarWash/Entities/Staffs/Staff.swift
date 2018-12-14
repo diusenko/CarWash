@@ -10,17 +10,13 @@ import Foundation
 
 class Staff<ProcessedObject: MoneyGiver>: Person {
     
-    var processingObjectsIsEmpty: Bool {
-        return self.processingObjects.isEmpty
-    }
-    
     override var state: State {
         get { return self.atomicState.value }
         set {
             guard self.state != newValue else { return }
             
             self.atomicState.modify {
-                if newValue == .available && !self.processingObjectsIsEmpty {  //  corner case
+                if newValue == .available && !self.processingObjectsIsEmpty {
                     $0 = .busy
                     self.processingObjects.dequeue().do(self.asyncDoWork)
                 } else {
@@ -30,6 +26,10 @@ class Staff<ProcessedObject: MoneyGiver>: Person {
             
             self.notify(state: self.atomicState.value)
         }
+    }
+    
+    var processingObjectsIsEmpty: Bool {
+        return self.processingObjects.isEmpty
     }
     
     private let queue: DispatchQueue

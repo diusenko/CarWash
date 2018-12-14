@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Person: Stateable, MoneyReceiver, MoneyGiver, Synchronizable, CustomStringConvertible  {
+class Person: ObservableObject<Person.State>, Stateable, MoneyReceiver, MoneyGiver, Synchronizable, CustomStringConvertible  {
     
     enum State {
         case available
@@ -22,13 +22,10 @@ class Person: Stateable, MoneyReceiver, MoneyGiver, Synchronizable, CustomString
     
     var state: Person.State = .available
     
-    private var atomicObservers = Atomic([StaffObserver]())
-    
     let atomicState = Atomic(State.available)
+    let id: Int
     
     private let atomicMoney = Atomic(0)
-    
-    let id: Int
     
     deinit {
         print("deinit \(self)")
@@ -49,25 +46,6 @@ class Person: Stateable, MoneyReceiver, MoneyGiver, Synchronizable, CustomString
     func receive(money: Int) {
         self.atomicMoney.modify {
             $0 += money
-        }
-    }
-    
-    func observer(handler: @escaping StaffObserver.Handler) -> StaffObserver {
-        return self.atomicObservers.modify {
-            let staffObserver = StaffObserver(sender: self, handler: handler)
-            $0.append(staffObserver)
-            staffObserver.handler(self.state)
-            
-            return staffObserver
-        }
-    }
-    
-    func notify(state: State){
-        self.atomicObservers.modify {
-            $0 = $0.filter { $0.IsObserving }
-            $0.forEach {
-                $0.handler(state)
-            }
         }
     }
     

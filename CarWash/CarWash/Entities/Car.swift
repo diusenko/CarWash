@@ -18,7 +18,7 @@ class Car: MoneyGiver {
     var state: State {
         get { return self.atomicState.value }
         set {
-            atomicState.value = newValue
+            self.atomicState.value = newValue
         }
     }
     
