@@ -10,7 +10,7 @@ import Foundation
 
 extension Strideable where Self.Stride: SignedInteger & Comparable, Self: ExpressibleByIntegerLiteral {
     
-    func times(_ execute: () -> ()) {
+    func times(_ execute: F.VoidExecute) {
         (0..<self).forEach { _ in
             execute()
         }

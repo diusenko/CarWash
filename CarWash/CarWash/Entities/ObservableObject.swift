@@ -16,18 +16,15 @@ class ObservableObject<State> {
         return self.atomicObservers.modify {
             let observer = Observer(sender: self, handler: handler)
             $0.append(observer)
-            //observer.handler(self.state)
             
             return observer
         }
     }
     
-    func notify(state: State){
+    func notify(state: State) {
         self.atomicObservers.modify {
             $0 = $0.filter { $0.isObserving }
-            $0.forEach {
-                $0.handler(state)
-            }
+            $0.forEach { $0.handler(state) }
         }
     }
 }
@@ -47,8 +44,9 @@ extension ObservableObject {
         }
         
         private weak var sender: ObservableObject?
+        
         private(set) var handler: Handler
-
+        
         init(sender: ObservableObject, handler: @escaping Handler) {
             self.sender = sender
             self.handler = handler

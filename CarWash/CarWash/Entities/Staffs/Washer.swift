@@ -17,8 +17,7 @@ class Washer: Staff<Car> {
     override func completeProcessing(object car: Car) {
         self.receiveMoney(from: car)
         print(
-            self,
-            "wash", "Car",
+            self, "wash", "Car",
             "and get", "\(self.money)$"
         )
     }

@@ -19,13 +19,6 @@ class WashService {
     
     private var weakObservers = Atomic([Person.Observer]())
     
-    deinit {
-        print("deinit")
-        self.weakObservers.value.forEach {
-            $0.cancel()
-        }
-    }
-    
     init(
         id: Int,
         accountant: Accountant,
@@ -59,27 +52,42 @@ class WashService {
         }
     }
     
-    func attach() {
-        self.washers.value.forEach { washer in
-           
-            let weakWasherObserver = washer.observer { [weak self, weak washer] in
-                    switch $0 {
-                    case .available: self?.cars.dequeue().do { washer?.performWork(processedObject: $0) }
-                    case .waitForProcessing: washer.apply(self?.accountant.performWork)
-                    case .busy: return
+    private func attach() {
+        weak var weakSelf = self
+        
+        self.weakObservers.value = self.washers.value.map { washer in
+            let weakWasherObserver = washer.observer { [weak washer] in
+                switch $0 {
+                case .available:
+                    self.asyncDoEmployWork {
+                        weakSelf?.cars.dequeue().apply(washer?.performWork)
                     }
+                case .waitForProcessing:
+                    self.asyncDoEmployWork {
+                        washer.apply(weakSelf?.accountant.performWork)
+                    }
+                case .busy: return
+                }
             }
-            self.weakObservers.value.append(weakWasherObserver)
             
+            return weakWasherObserver
         }
         
-        let weakAccountantObserver = self.accountant.observer { [weak self] in
+        let weakAccountantObserver = self.accountant.observer {
             switch $0 {
             case .available: return
-            case .waitForProcessing: (self?.accountant).apply(self?.director.performWork)
+            case .waitForProcessing:
+                self.asyncDoEmployWork {
+                    (weakSelf?.accountant).apply(weakSelf?.director.performWork)
+                }
             case .busy: return
             }
         }
         self.weakObservers.value.append(weakAccountantObserver)
     }
+    
+    private func asyncDoEmployWork(execute: @escaping F.VoidExecute) {
+        DispatchQueue.background.async { execute() }
+    }
+    
 }
