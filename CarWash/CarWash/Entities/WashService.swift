@@ -89,5 +89,4 @@ class WashService {
     private func asyncDoEmployWork(execute: @escaping F.VoidExecute) {
         DispatchQueue.background.async { execute() }
     }
-    
 }
