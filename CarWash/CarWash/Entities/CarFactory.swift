@@ -24,7 +24,8 @@ class CarFactory {
     private let queue: DispatchQueue
     
     deinit {
-        self.cancel()
+        self.cancellationToken?.stop()
+        self.cancellationToken = nil
     }
     
     init(washService: WashService, interval: TimeInterval, queue: DispatchQueue = .background) {

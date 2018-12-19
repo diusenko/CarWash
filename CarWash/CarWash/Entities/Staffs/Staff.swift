@@ -50,10 +50,13 @@ class Staff<ProcessedObject: MoneyGiver>: Person {
     func completeProcessing(object: ProcessedObject) { }
     
     func completePerformWork() {
-        if let processingObject = self.processingObjects.dequeue() {
-            self.asyncDoWork(with: processingObject)
-        } else {
-            self.state = .waitForProcessing
+        self.atomicState.modify {
+            if let processingObject = self.processingObjects.dequeue() {
+                self.asyncDoWork(with: processingObject)
+            } else {
+                $0 = .waitForProcessing
+                self.notify(state: $0)
+            }
         }
     }
     

@@ -10,7 +10,7 @@ import Foundation
 
 class ObservableObject<State> {
     
-    private var atomicObservers = Atomic([Observer]())
+    private let atomicObservers = Atomic([Observer]())
     
     func observer(handler: @escaping Observer.Handler) -> Observer {
         return self.atomicObservers.modify {
