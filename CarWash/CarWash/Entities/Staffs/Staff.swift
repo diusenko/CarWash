@@ -8,32 +8,21 @@
 
 import Foundation
 
-class Staff<ProcessedObject: MoneyGiver>: Person {
+class Staff<ProcessedObject: MoneyGiver>: Person, Processable {
     
     override var state: State {
         get { return self.atomicState.value }
         set {
             self.atomicState.modify {
-                guard $0 != newValue else { return }
-                
-                if newValue == .available && !self.processingObjectsIsEmpty {
-                    $0 = .busy
-                    self.processingObjects.dequeue().do(self.asyncDoWork)
-                } else {
-                    $0 = newValue
-                }
-                self.notify(state: $0)
+                $0 = newValue
+                self.notify(handler: $0)
             }
         }
     }
     
-    var processingObjectsIsEmpty: Bool {
-        return self.processingObjects.isEmpty
-    }
-    
     private let queue: DispatchQueue
     private let durationOfWork: ClosedRange<Double>
-    private let processingObjects = Queue<ProcessedObject>()
+    
     
     init(
         id: Int,
@@ -50,32 +39,19 @@ class Staff<ProcessedObject: MoneyGiver>: Person {
     func completeProcessing(object: ProcessedObject) { }
     
     func completePerformWork() {
-        self.atomicState.modify {
-            if let processingObject = self.processingObjects.dequeue() {
-                self.asyncDoWork(with: processingObject)
-            } else {
-                $0 = .waitForProcessing
-                self.notify(state: $0)
-            }
-        }
+        self.state = .waitForProcessing
     }
     
-    func performWork(processedObject: ProcessedObject) {
+    func processObject(processedObject: ProcessedObject) {
         self.atomicState.modify { state in
             if state == .available {
                 state = .busy
-                self.asyncDoWork(with: processedObject)
-            } else {
-                self.processingObjects.enqueue(processedObject)
+                self.queue.asyncAfter(deadline: .afterRandomInterval(in: self.durationOfWork)) {
+                    self.performProcessing(object: processedObject)
+                    self.completeProcessing(object: processedObject)
+                    self.completePerformWork()
+                }
             }
-        }
-    }
-    
-    private func asyncDoWork(with processedObject: ProcessedObject) {
-        self.queue.asyncAfter(deadline: .afterRandomInterval(in: self.durationOfWork)) {
-            self.performProcessing(object: processedObject)
-            self.completeProcessing(object: processedObject)
-            self.completePerformWork()
         }
     }
 }

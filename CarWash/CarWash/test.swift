@@ -18,8 +18,8 @@ func test() {
             washers.append($0)
     }
     
-    let director = Director(id: 1)
-    let accountant = Accountant(id: 1)
+    let director = [Director(id: 1)]
+    let accountant = [Accountant(id: 1)]
     
     let washService = WashService(
         id: 1,

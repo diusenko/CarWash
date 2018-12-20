@@ -12,81 +12,31 @@ class WashService {
     
     let id: Int
     
-    private let accountant: Accountant
-    private let director: Director
-    private let washers: Atomic<[Washer]>
-    private let cars = Queue<Car>()
+    //private let weakObservers = Atomic([StaffManager<Staff<ProcessedObject>,MoneyGiver>.Observer]())
     
-    private var weakObservers = Atomic([Person.Observer]())
+    private let washerManager: StaffManager<Washer, Car>
+    private let accountManager: StaffManager<Accountant, Washer>
+    private let directorManager: StaffManager<Director, Accountant>
     
     init(
         id: Int,
-        accountant: Accountant,
-        director: Director,
+        accountant: [Accountant],
+        director: [Director],
         washers: [Washer]
     ) {
         self.id = id
-        self.accountant = accountant
-        self.washers = Atomic(washers)
-        self.director = director
+        self.washerManager = StaffManager(objects: washers)
+        self.accountManager = StaffManager(objects: accountant)
+        self.directorManager = StaffManager(objects: director)
         self.attach()
     }
     
     func washCar(_ car: Car) {
-        self.washers.transform {
-            let availableWasher = $0.first {
-                $0.state == .available
-            }
-            
-            let enqueueCar = { self.cars.enqueue(car) }
-            
-            if self.cars.isEmpty {
-                if let availableWasher = availableWasher {
-                    availableWasher.performWork(processedObject: car)
-                } else {
-                    enqueueCar()
-                }
-            } else {
-                enqueueCar()
-            }
-        }
+        self.washerManager.performWork(processedObject: car)
     }
     
     private func attach() {
-        weak var weakSelf = self
-        
-        self.weakObservers.value = self.washers.value.map { washer in
-            let weakWasherObserver = washer.observer { [weak washer] in
-                switch $0 {
-                case .available:
-                    self.asyncDoEmployWork {
-                        weakSelf?.cars.dequeue().apply(washer?.performWork)
-                    }
-                case .waitForProcessing:
-                    self.asyncDoEmployWork {
-                        washer.apply(weakSelf?.accountant.performWork)
-                    }
-                case .busy: return
-                }
-            }
-            
-            return weakWasherObserver
-        }
-        
-        let weakAccountantObserver = self.accountant.observer {
-            switch $0 {
-            case .available: return
-            case .waitForProcessing:
-                self.asyncDoEmployWork {
-                    (weakSelf?.accountant).apply(weakSelf?.director.performWork)
-                }
-            case .busy: return
-            }
-        }
-        self.weakObservers.value.append(weakAccountantObserver)
-    }
-    
-    private func asyncDoEmployWork(execute: @escaping F.VoidExecute) {
-        DispatchQueue.background.async { execute() }
-    }
+        self.washerManager.observer(handler: self.accountManager.performWork)
+        self.accountManager.observer(handler: self.directorManager.performWork)
+   }
 }
