@@ -26,7 +26,6 @@ class StaffManager<Object: Staff<ProcessedObject>, ProcessedObject: MoneyGiver>:
     
     func performWork(processedObject: ProcessedObject) {
         self.objects.transform {
-            
             let availableObject = $0.first {
                 $0.state == .available
             }
@@ -34,7 +33,6 @@ class StaffManager<Object: Staff<ProcessedObject>, ProcessedObject: MoneyGiver>:
             let enqueueProcessingObject = { self.processingObjects.enqueue(processedObject) }
             
             if self.processingObjects.isEmpty {
-                
                 if let availableObject = availableObject {
                     availableObject.processObject(processedObject: processedObject)
                 } else {
@@ -61,6 +59,7 @@ class StaffManager<Object: Staff<ProcessedObject>, ProcessedObject: MoneyGiver>:
                     }
                 }
             }
+            
             return weakWasherObserver
         }
     }

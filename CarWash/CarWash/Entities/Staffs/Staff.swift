@@ -23,7 +23,6 @@ class Staff<ProcessedObject: MoneyGiver>: Person, Processable {
     private let queue: DispatchQueue
     private let durationOfWork: ClosedRange<Double>
     
-    
     init(
         id: Int,
         durationOfWork: ClosedRange<Double> = 0.0...1.0,
@@ -43,15 +42,15 @@ class Staff<ProcessedObject: MoneyGiver>: Person, Processable {
     }
     
     func processObject(processedObject: ProcessedObject) {
-        self.atomicState.modify { state in
-            if state == .available {
-                state = .busy
-                self.queue.asyncAfter(deadline: .afterRandomInterval(in: self.durationOfWork)) {
-                    self.performProcessing(object: processedObject)
-                    self.completeProcessing(object: processedObject)
-                    self.completePerformWork()
-                }
-            }
+        //self.atomicState.modify { state in
+            //if state == .available {
+        self.state = .busy
+        self.queue.asyncAfter(deadline: .afterRandomInterval(in: self.durationOfWork)) {
+            self.performProcessing(object: processedObject)
+            self.completeProcessing(object: processedObject)
+            self.completePerformWork()
         }
+            //}
+        //}
     }
 }

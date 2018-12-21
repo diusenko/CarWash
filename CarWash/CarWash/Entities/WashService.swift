@@ -12,7 +12,8 @@ class WashService {
     
     let id: Int
     
-    //private let weakObservers = Atomic([StaffManager<Staff<ProcessedObject>,MoneyGiver>.Observer]())
+    private let weakWashersManagerObservers = Atomic([StaffManager<Washer, Car>.Observer]())
+    private let weakAccountantsManagerObservers = Atomic([StaffManager<Accountant, Washer>.Observer]())
     
     private let washerManager: StaffManager<Washer, Car>
     private let accountManager: StaffManager<Accountant, Washer>
@@ -36,7 +37,14 @@ class WashService {
     }
     
     private func attach() {
-        self.washerManager.observer(handler: self.accountManager.performWork)
-        self.accountManager.observer(handler: self.directorManager.performWork)
+        let weakWasher = self.washerManager.observer(handler: self.accountManager.performWork)
+        let weakAccountant = self.accountManager.observer(handler: self.directorManager.performWork)
+        
+        self.weakWashersManagerObservers.modify {
+            $0.append(weakWasher)
+        }
+        self.weakAccountantsManagerObservers.modify {
+            $0.append(weakAccountant)
+        }
    }
 }
