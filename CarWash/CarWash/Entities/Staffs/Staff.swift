@@ -37,20 +37,18 @@ class Staff<ProcessedObject: MoneyGiver>: Person, Processable {
     
     func completeProcessing(object: ProcessedObject) { }
     
-    func completePerformWork() {
+    func completeProcessObject() {
         self.state = .waitForProcessing
     }
     
     func processObject(processedObject: ProcessedObject) {
         //self.atomicState.modify { state in
-            //if state == .available {
         self.state = .busy
         self.queue.asyncAfter(deadline: .afterRandomInterval(in: self.durationOfWork)) {
             self.performProcessing(object: processedObject)
             self.completeProcessing(object: processedObject)
-            self.completePerformWork()
+            self.completeProcessObject()
         }
-            //}
         //}
     }
 }

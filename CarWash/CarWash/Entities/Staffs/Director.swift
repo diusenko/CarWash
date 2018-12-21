@@ -10,7 +10,7 @@ import Foundation
 
 class Director: Manager<Accountant> {
     
-    override func completePerformWork() {
+    override func completeProcessObject() {
         self.state = .available
     }
 }
