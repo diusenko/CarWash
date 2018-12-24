@@ -11,7 +11,7 @@ import Foundation
 class Atomic<Value> {
     
     public typealias ValueType = Value
-    public typealias PropertyObserver = ((old: Value, new: Value)) -> ()
+    public typealias PropertyObserver = ((old: ValueType, new: ValueType)) -> ()
     
     public var value: ValueType {
         get { return self.transform { $0 } }
@@ -21,28 +21,37 @@ class Atomic<Value> {
     private var mutableValue: ValueType
     
     private let didSet: PropertyObserver?
+    private let willSet: PropertyObserver?
     private let lock: NSRecursiveLock
     
     init(
         _ value: ValueType,
         lock: NSRecursiveLock = NSRecursiveLock(),
-        didSet: PropertyObserver? = nil
+        didSet: PropertyObserver? = nil,
+        willSet: PropertyObserver? = nil
     ) {
         self.mutableValue = value
         self.lock = lock
         self.didSet = didSet
+        self.willSet = willSet
     }
     
     @discardableResult
     public func modify<Result>(_ action: (inout ValueType) -> Result) -> Result {
         return self.lock.locked {
             let oldValue = self.mutableValue
+            var newValue = self.mutableValue
+            
+            let result = action(&newValue)
+            
+            self.willSet?((old: oldValue, new: newValue))
+            self.mutableValue = newValue
             
             defer {
                 self.didSet?((old: oldValue, new: self.mutableValue))
             }
             
-            return action(&self.mutableValue)
+            return result
         }
     }
     

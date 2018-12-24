@@ -8,4 +8,6 @@
 
 import Foundation
 
+let a = Atomic(0, willSet: { print($0.new) })
+
 test()

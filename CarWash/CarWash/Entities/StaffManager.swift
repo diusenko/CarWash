@@ -49,7 +49,7 @@ class StaffManager<Object: Staff<ProcessedObject>, ProcessedObject: MoneyGiver>:
         
         self.weakObservers.value = self.objects.value.map { object in
             let weakWasherObserver = object.observer { [weak object] state in
-                DispatchQueue.background.async {
+                DispatchQueue.background.sync {
                     switch state {
                     case .available:
                         weakSelf?.processingObjects.dequeue().apply(object?.processObject)
