@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3F173DD421C918C5006BDA26 /* ObservableObject.Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F173DD321C918C5006BDA26 /* ObservableObject.Observer.swift */; };
+		3F21133021D0DED6005A46E5 /* CancellableProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F21132F21D0DED6005A46E5 /* CancellableProperty.swift */; };
+		3F21133221D0E36E005A46E5 /* Cancellable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F21133121D0E36E005A46E5 /* Cancellable.swift */; };
 		3F38110D2182FB5D007CC2B3 /* F.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F38110C2182FB5D007CC2B3 /* F.swift */; };
 		3F38110F2183140D007CC2B3 /* Strideable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F38110E2183140D007CC2B3 /* Strideable+Extension.swift */; };
 		3F381111218315DA007CC2B3 /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F381110218315DA007CC2B3 /* Optional+Extension.swift */; };
@@ -51,6 +53,8 @@
 
 /* Begin PBXFileReference section */
 		3F173DD321C918C5006BDA26 /* ObservableObject.Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableObject.Observer.swift; sourceTree = "<group>"; };
+		3F21132F21D0DED6005A46E5 /* CancellableProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancellableProperty.swift; sourceTree = "<group>"; };
+		3F21133121D0E36E005A46E5 /* Cancellable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cancellable.swift; sourceTree = "<group>"; };
 		3F38110C2182FB5D007CC2B3 /* F.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = F.swift; sourceTree = "<group>"; };
 		3F38110E2183140D007CC2B3 /* Strideable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strideable+Extension.swift"; sourceTree = "<group>"; };
 		3F381110218315DA007CC2B3 /* Optional+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Optional+Extension.swift"; sourceTree = "<group>"; };
@@ -98,6 +102,7 @@
 				3F38110C2182FB5D007CC2B3 /* F.swift */,
 				3FEB5D952189F45500A46F1D /* Atomic.swift */,
 				3F88AB2E21874F59003B6258 /* Queue.swift */,
+				3F21132F21D0DED6005A46E5 /* CancellableProperty.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -179,6 +184,7 @@
 				3F84B19B217F3E8C0074A4CC /* MoneyReceiver.swift */,
 				3F68F55921931DD200C9FE1C /* Stateable.swift */,
 				3F552A5E21CBE34900E5F999 /* Processable.swift */,
+				3F21133121D0E36E005A46E5 /* Cancellable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -248,6 +254,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F21133221D0E36E005A46E5 /* Cancellable.swift in Sources */,
 				8BBD1078219B5E650005F2BD /* Manager.swift in Sources */,
 				3FE72B2021804DEF002A5F42 /* DispatchTime+Extension.swift in Sources */,
 				3F84B18B217F08800074A4CC /* Staff.swift in Sources */,
@@ -273,6 +280,7 @@
 				3F84B190217F08800074A4CC /* Director.swift in Sources */,
 				3F38110D2182FB5D007CC2B3 /* F.swift in Sources */,
 				3F84B19C217F3E8C0074A4CC /* MoneyReceiver.swift in Sources */,
+				3F21133021D0DED6005A46E5 /* CancellableProperty.swift in Sources */,
 				3F88AB2F21874F59003B6258 /* Queue.swift in Sources */,
 				3F381111218315DA007CC2B3 /* Optional+Extension.swift in Sources */,
 				3F84B196217F08800074A4CC /* MoneyGiver.swift in Sources */,

@@ -47,7 +47,7 @@ extension DispatchQueue {
         }
     }
     
-    class CancellationToken {
+    class CancellationToken: Cancellable {
         
         var isCancelled: Bool {
             return !self.tokenState.value
@@ -55,7 +55,7 @@ extension DispatchQueue {
         
         private let tokenState = Atomic(true)
         
-        func stop() {
+        func cancel() {
             tokenState.value = false
         }
     }

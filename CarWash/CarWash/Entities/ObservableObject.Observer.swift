@@ -10,7 +10,7 @@ import Foundation
 
 extension ObservableObject {
     
-    class Observer: Hashable {
+    class Observer: Hashable, Cancellable {
         
         typealias Handler = (State) -> ()
         
@@ -18,7 +18,7 @@ extension ObservableObject {
             return ObjectIdentifier(self).hashValue
         }
         
-        var isObserving: Bool {
+        var isCancelled: Bool {
             return self.sender != nil
         }
         

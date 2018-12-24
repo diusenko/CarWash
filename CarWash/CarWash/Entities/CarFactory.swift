@@ -15,7 +15,7 @@ class CarFactory {
     }
     
     private var cancellationToken: DispatchQueue.CancellationToken? {
-        willSet { self.cancellationToken?.stop() }
+        willSet { self.cancellationToken?.cancel() }
     }
 
     private let cars = 10
@@ -24,7 +24,7 @@ class CarFactory {
     private let queue: DispatchQueue
     
     deinit {
-        self.cancellationToken?.stop()
+        self.cancellationToken?.cancel()
         self.cancellationToken = nil
     }
     

@@ -27,8 +27,8 @@ class Atomic<Value> {
     init(
         _ value: ValueType,
         lock: NSRecursiveLock = NSRecursiveLock(),
-        didSet: PropertyObserver? = nil,
-        willSet: PropertyObserver? = nil
+        willSet: PropertyObserver? = nil,
+        didSet: PropertyObserver? = nil
     ) {
         self.mutableValue = value
         self.lock = lock

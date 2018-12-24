@@ -12,8 +12,7 @@ class WashService {
     
     let id: Int
     
-    private let weakWashersManagerObservers = Atomic([StaffManager<Washer, Car>.Observer]())
-    private let weakAccountantsManagerObservers = Atomic([StaffManager<Accountant, Washer>.Observer]())
+    private var managerObservers = CompositeCancellableProperty()
     
     private let washerManager: StaffManager<Washer, Car>
     private let accountManager: StaffManager<Accountant, Washer>
@@ -39,12 +38,6 @@ class WashService {
     private func attach() {
         let weakWasher = self.washerManager.observer(handler: self.accountManager.performWork)
         let weakAccountant = self.accountManager.observer(handler: self.directorManager.performWork)
-        
-        self.weakWashersManagerObservers.modify {
-            $0.append(weakWasher)
-        }
-        self.weakAccountantsManagerObservers.modify {
-            $0.append(weakAccountant)
-        }
+        self.managerObservers.value = [weakWasher, weakAccountant]
    }
 }
