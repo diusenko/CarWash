@@ -2,7 +2,7 @@
 //  Manager.swift
 //  CarWash
 //
-//  Created by Student on 12/19/18.
+//  Created by Usenko Dmitry on 12/19/18.
 //  Copyright © 2018 Student. All rights reserved.
 //
 

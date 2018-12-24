@@ -2,7 +2,7 @@
 //  ObservableObject+Observer.swift
 //  CarWash
 //
-//  Created by Student on 12/18/18.
+//  Created by Usenko Dmitry on 12/18/18.
 //  Copyright © 2018 Student. All rights reserved.
 //
 

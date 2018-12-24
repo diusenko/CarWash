@@ -2,7 +2,7 @@
 //  1eqw.swift
 //  CarWash
 //
-//  Created by Student on 10/31/18.
+//  Created by Usenko Dmitry on 10/31/18.
 //  Copyright © 2018 Student. All rights reserved.
 //
 

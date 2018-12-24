@@ -2,7 +2,7 @@
 //  Synchronizable.swift
 //  Carwash
 //
-//  Created by Yevhen Triukhan on 10/30/18.
+//  Created by Usenko Dmitry on 10/30/18.
 //  Copyright © 2018 Student. All rights reserved.
 //
 
