@@ -18,6 +18,10 @@ class StaffManager<Object: Staff<ProcessedObject>, ProcessedObject: MoneyGiver>:
     private let processingObjects = Queue<ProcessedObject>()
     private let objects = Atomic([Object]())
     
+    deinit {
+        print("deinit \(self)")
+    }
+    
     init(objects: [Object]) {
         self.objects.value = objects
         super.init()
@@ -49,14 +53,12 @@ class StaffManager<Object: Staff<ProcessedObject>, ProcessedObject: MoneyGiver>:
         
         self.weakObservers.value = self.objects.value.map { object in
             let weakWasherObserver = object.observer { [weak object] state in
-                DispatchQueue.background.sync {
-                    switch state {
-                    case .available:
-                        weakSelf?.processingObjects.dequeue().apply(object?.processObject)
-                    case .waitForProcessing:
-                        object.apply(weakSelf?.notify)
-                    case .busy: return
-                    }
+                switch state {
+                case .available:
+                    weakSelf?.processingObjects.dequeue().apply(object?.processObject)
+                case .waitForProcessing:
+                    object.apply(weakSelf?.notify)
+                case .busy: return
                 }
             }
             

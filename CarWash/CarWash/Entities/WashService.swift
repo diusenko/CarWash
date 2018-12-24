@@ -18,6 +18,10 @@ class WashService {
     private let accountManager: StaffManager<Accountant, Washer>
     private let directorManager: StaffManager<Director, Accountant>
     
+    deinit {
+        print("deinit \(self)")
+    }
+    
     init(
         id: Int,
         accountant: [Accountant],

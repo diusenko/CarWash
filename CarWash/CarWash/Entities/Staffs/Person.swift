@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Person: ObservableObject<Person.State>, Stateable, MoneyReceiver, MoneyGiver, Synchronizable, CustomStringConvertible  {
+class Person: ObservableObject<Person.State>, Stateable, MoneyReceiver, MoneyGiver, CustomStringConvertible  {
     
     enum State {
         case available

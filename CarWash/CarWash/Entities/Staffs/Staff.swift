@@ -22,7 +22,7 @@ class Staff<ProcessedObject: MoneyGiver>: Person, Processable {
     
     private let queue: DispatchQueue
     private let durationOfWork: ClosedRange<Double>
-    
+
     init(
         id: Int,
         durationOfWork: ClosedRange<Double> = 0.0...1.0,
@@ -50,3 +50,4 @@ class Staff<ProcessedObject: MoneyGiver>: Person, Processable {
         }
     }
 }
+
